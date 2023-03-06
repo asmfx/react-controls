@@ -8,8 +8,9 @@
     "url": "https://github.com/asmfx/react-controls.git"
   },
   "scripts": {
-    "check:publish": "npm publish --access=public --dry-run",
-    "publish:patch": "npm version patch && npm publish --access=public",
+    "publish:check": "npm publish --access=public --dry-run",
+    "publish:withpatch": "npm version patch && npm publish --access=public",
+    "publish": "npm publish --access=public",
     "build": "tsc"
   },
   "author": "Asim Gunes",
