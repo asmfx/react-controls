@@ -10,7 +10,7 @@
   "scripts": {
     "publish:check": "npm publish --access=public --dry-run",
     "publish:withpatch": "npm version patch && npm publish --access=public",
-    "publish": "npm publish --access=public",
+    "publish:direct": "npm publish --access=public",
     "build": "tsc"
   },
   "author": "Asim Gunes",
