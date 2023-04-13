@@ -1,3 +1,5 @@
+import { InputOption } from "./types";
+
 export const getControlValidationErrors = (
   errors: any,
   name?: string
@@ -29,4 +31,53 @@ export const statusFailCheck = (result: { status: number }) => {
     return Promise.reject(result);
   }
   return Promise.resolve(result);
+};
+
+export const getChildItems = (
+  tree: any[],
+  parentKey: string,
+  id: any,
+  label: string,
+  seperator: string
+) => {
+  let options: InputOption[] = [];
+  let childItems = tree.filter((o) => o[parentKey] === id);
+  childItems.sort((a, b) =>
+    (a.label || a.name || a.text) < (b.label || b.name || b.text) ? -1 : 1
+  );
+  for (const child of childItems) {
+    const item = {
+      id: child.id,
+      label: `${label ? `${label}${seperator}` : ""}${
+        child.label || child.name || child.text
+      }`,
+    };
+    options.push(
+      item,
+      ...getChildItems(tree, parentKey, item.id, item.label, seperator)
+    );
+  }
+  return options;
+};
+export const getTreeOptions = (
+  tree: any[],
+  parentKey: string,
+  seperator: string
+) => {
+  let options: InputOption[] = [];
+  let childItems = tree.filter((o) => !o[parentKey]);
+  childItems.sort((a, b) =>
+    (a.label || a.name || a.text) < (b.label || b.name || b.text) ? -1 : 1
+  );
+  for (const child of childItems) {
+    const item = {
+      id: child.id,
+      label: child.label || child.name || child.text,
+    };
+    options.push(
+      item,
+      ...getChildItems(tree, parentKey, item.id, item.label, seperator)
+    );
+  }
+  return options;
 };

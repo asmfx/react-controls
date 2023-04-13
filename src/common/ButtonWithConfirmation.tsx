@@ -5,6 +5,7 @@ import { Variant, ValidReturnTypes } from "./types";
 
 export const ButtonWithConfirmation: React.FC<{
   title?: string;
+  message?: string;
   label?: string;
   actionLabel?: string;
   cancelLabel?: string;
@@ -12,9 +13,10 @@ export const ButtonWithConfirmation: React.FC<{
   data?: any;
   disabled?: boolean;
   onAction?: (args?: any) => ValidReturnTypes;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }> = ({
   title,
+  message,
   actionLabel,
   cancelLabel,
   label,
@@ -41,7 +43,7 @@ export const ButtonWithConfirmation: React.FC<{
       ></Button>
       <Modal show={show} onHide={() => setShow(false)}>
         {title && <Modal.Header>{title}</Modal.Header>}
-        <Modal.Body>{children}</Modal.Body>
+        <Modal.Body>{children || message}</Modal.Body>
         <Modal.Footer>
           <div className="d-flex justify-content-end w-100 gap-2">
             {onAction && (

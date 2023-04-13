@@ -1,7 +1,8 @@
-import { DetailedHTMLProps, InputHTMLAttributes } from "react";
+import { DetailedHTMLProps, InputHTMLAttributes, ReactNode } from "react";
 import { IControlValidationProps, IFormController } from "./useForm";
 
 export type Variant =
+  | "none"
   | "primary"
   | "secondary"
   | "success"
@@ -33,7 +34,8 @@ export type HTMLInput = DetailedHTMLProps<
 >;
 
 export interface IBaseControlProps {
-  label?: string;
+  label?: ReactNode;
+  icon?: ReactNode;
   controller?: IFormController;
   name?: string;
   variant?: Variant;
@@ -42,6 +44,7 @@ export interface IBaseControlProps {
   bind?: any;
   tag?: any;
   disabled?: boolean;
+  children?: ReactNode;
 }
 
 export interface IFormControlProps extends IBaseControlProps {
@@ -53,6 +56,7 @@ export interface IFormControlProps extends IBaseControlProps {
   suffix?: string | React.ReactNode;
   prefix?: string | React.ReactNode;
   children?: React.ReactNode;
+  readOnly?: boolean;
 
   onChange?: (args: {
     value: string;
@@ -62,6 +66,26 @@ export interface IFormControlProps extends IBaseControlProps {
 }
 
 export interface ILabelProps extends Omit<IFormControlProps, "onChange"> {}
+export interface IListViewerProps
+  extends Omit<IFormControlProps, "onChange" | "value"> {
+  value?: any[];
+  options?: any[];
+  renderItem?: (item: any, index?: number, list?: any[]) => ReactNode;
+}
+
+export interface ICrossFormProps
+  extends Omit<IFormControlProps, "onChange" | "value"> {
+  options?: any[];
+  value?: any[];
+  renderItem?: (args: {
+    selected: boolean;
+    selectHandler: (options: any) => ValidReturnTypes;
+    option: any;
+    item: any;
+    index?: number;
+    list?: any[];
+  }) => ReactNode;
+}
 
 export interface ITextboxProps
   extends IControlValidationProps,
@@ -69,6 +93,10 @@ export interface ITextboxProps
   type?: TextboxType;
   maxLength?: number;
 }
+
+export interface ICheckboxProps
+  extends IControlValidationProps,
+    IFormControlProps {}
 
 export interface IButtonProps extends IBaseControlProps {
   type?: ButtonType;
@@ -83,4 +111,69 @@ export interface InputOption {
   label?: string;
   name?: string;
   text?: string;
+}
+
+export interface ISelectProps
+  extends IControlValidationProps,
+    IFormControlProps {
+  options?: InputOption[];
+  parentKey?: string;
+  rootId?: any;
+  seperator?: string;
+  visible?: boolean;
+  noDefault?: boolean;
+  onChange?: (args: {
+    value: string;
+    intValue?: number;
+    name?: string;
+    tag?: any;
+  }) => ValidReturnTypes;
+  dataType?: "int" | "string";
+}
+
+export interface IMultiSelectProps
+  extends IControlValidationProps,
+    IFormControlProps {
+  options?: InputOption[];
+  parentKey?: string;
+  rootId?: any;
+  seperator?: string;
+  visible?: boolean;
+  noDefault?: boolean;
+  onChange?: (args: {
+    value: any;
+    name?: string;
+    tag?: any;
+  }) => ValidReturnTypes;
+  dataType?: "int" | "string" | "csv";
+}
+
+export interface ICrossSelectProps
+  extends IControlValidationProps,
+    IFormControlProps {
+  options?: InputOption[];
+  parentKey?: string;
+  rootId?: any;
+  seperator?: string;
+  visible?: boolean;
+  noDefault?: boolean;
+  lookupRef?: string;
+  onChange?: (args: {
+    value: any;
+    name?: string;
+    tag?: any;
+  }) => ValidReturnTypes;
+  dataType?: "int" | "string";
+}
+
+export interface ICardItemProps extends IBaseControlProps {
+  title?: string;
+  variant?: Variant;
+  icon?: ReactNode;
+  description?: string;
+  actionLabel?: string;
+  actionVariant?: Variant;
+  cancelLabel?: string;
+  cancelVariant?: Variant;
+  type?: "modal" | "right-pane";
 }

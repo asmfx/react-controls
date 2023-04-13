@@ -34,6 +34,7 @@ export interface UseFormReturnValues<T> {
   busy: boolean;
   reset: () => ValidReturnTypes;
   setValues: (values: Partial<T>) => ValidReturnTypes;
+  setObject: (values: Partial<T>) => ValidReturnTypes;
   setValue: (name: string, value?: any) => ValidReturnTypes;
 
   setErrors: (values: any, force?: boolean) => ValidReturnTypes;
@@ -42,6 +43,7 @@ export interface UseFormReturnValues<T> {
 
   submitHandler: () => ValidReturnTypes;
 
+  rawChangeHandler: (arg: IAnyHandlerValue) => ValidReturnTypes;
   stringChangeHandler: (arg: IAnyHandlerValue) => ValidReturnTypes;
   intChangeHandler: (arg: IAnyHandlerValue) => ValidReturnTypes;
   booleanChangeHandler: (arg: IAnyHandlerValue) => ValidReturnTypes;
@@ -79,7 +81,18 @@ export const useForm = <T extends object>(
     setErrors({});
   };
 
+  useEffect(() => {
+    reset();
+  }, [initialValues]);
+
   const stringChangeHandler = ({ name, value }: IAnyHandlerValue) => {
+    const newValues = { ...values, [name]: value };
+    const isValid = validateAndSet(newValues);
+    setValues(newValues);
+    onChange?.(newValues, { isValid });
+  };
+
+  const rawChangeHandler = ({ name, value }: IAnyHandlerValue) => {
     const newValues = { ...values, [name]: value };
     const isValid = validateAndSet(newValues);
     setValues(newValues);
@@ -184,6 +197,13 @@ export const useForm = <T extends object>(
     onChange?.(newValues, { isValid });
   };
 
+  const setObject = (obj: any) => {
+    const newValues = { ...values, ...obj };
+    const isValid = validateAndSet(newValues);
+    setValues(newValues);
+    onChange?.(newValues, { isValid });
+  };
+
   const validateAndSet = (values: any, force?: boolean) => {
     if (!validate) {
       return true;
@@ -274,10 +294,12 @@ export const useForm = <T extends object>(
     checks,
     reset,
     setValues,
+    setObject,
     setValue,
     setErrors: updateInternalErrors,
     setError,
     clearError,
+    rawChangeHandler,
     stringChangeHandler,
     keyStringChangeHandler,
     keyIntChangeHandler,

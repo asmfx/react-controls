@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { IButtonProps } from "./types";
+import { IButtonProps, Size } from "./types";
 
 export const Button: React.FC<IButtonProps> = ({
   controller,
+  icon,
   bind,
   tag,
   type = "button",
@@ -16,6 +17,7 @@ export const Button: React.FC<IButtonProps> = ({
   outline,
   disabledLabel,
   autoDisabled,
+  children,
 }) => {
   const [innerDisabled, setInnerDisabled] = useState(false);
 
@@ -30,13 +32,21 @@ export const Button: React.FC<IButtonProps> = ({
 
   let style = {};
   if (border === "circle") {
-    const csize = "3em";
+    const csizes: Record<Size, string> = {
+      xs: "1.6em",
+      sm: "2em",
+      md: "3em",
+      lg: "4em",
+    };
+    const csize = csizes[size || "md"];
     style = {
       ...style,
       borderRadius: csize,
       width: csize,
       height: csize,
-      display: "inline-block",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
       padding: "0",
     };
   }
@@ -57,14 +67,13 @@ export const Button: React.FC<IButtonProps> = ({
   };
 
   return (
-    <button
-      type={type}
-      style={style}
-      className={className}
-      disabled={innerDisabled || disabled}
-      onClick={onClickHandler}
-    >
-      {innerDisabled || disabled ? disabledLabel ?? label : label}
-    </button>
+    <div style={style} className={className} onClick={onClickHandler}>
+      {children || (
+        <>
+          {icon}
+          {innerDisabled || disabled ? disabledLabel ?? label : label}
+        </>
+      )}
+    </div>
   );
 };
