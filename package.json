@@ -2,7 +2,8 @@
   "name": "@asmfx/react-controls",
   "version": "0.0.3",
   "description": "",
-  "main": "dist/index.js",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/asmfx/react-controls.git"
@@ -11,13 +12,20 @@
     "publish:check": "npm publish --access=public --dry-run",
     "publish:withpatch": "npm version patch && npm publish --access=public",
     "publish:direct": "npm publish --access=public",
-    "build": "tsc"
+    "build": "rollup -c"
   },
   "author": "Asim Gunes",
   "license": "ISC",
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^24.1.0",
+    "@rollup/plugin-node-resolve": "^15.0.2",
+    "@rollup/plugin-terser": "^0.4.1",
+    "@rollup/plugin-typescript": "^11.1.0",
     "@types/react": "^18.0.28",
     "@types/react-bootstrap": "^0.32.32",
+    "rollup": "^3.20.2",
+    "rollup-plugin-dts": "^5.3.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
     "typescript": "^4.9.5"
   },
   "dependencies": {
