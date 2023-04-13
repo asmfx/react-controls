@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { IButtonProps } from "./types";
 
 export const Button: React.FC<IButtonProps> = ({

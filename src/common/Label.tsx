@@ -1,4 +1,3 @@
-import React from "react";
 import { getControlValidationErrors } from "./helpers";
 import { ILabelProps } from "./types";
 

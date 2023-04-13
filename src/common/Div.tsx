@@ -1,5 +1,3 @@
-import React from "react";
-
 export const Div: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
   children,
   ...props

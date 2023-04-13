@@ -4,19 +4,18 @@ const typescript = require("@rollup/plugin-typescript");
 const dts = require("rollup-plugin-dts");
 const terser = require("@rollup/plugin-terser");
 const peerDepsExternal = require("rollup-plugin-peer-deps-external");
-const packageJson = require("./package.json");
 
 module.exports = [
   {
     input: "src/index.ts",
     output: [
       {
-        file: packageJson.main,
+        file: "dist/cjs/index.js",
         format: "cjs",
         sourcemap: true,
       },
       {
-        file: packageJson.module,
+        file: "dist/esm/index.js",
         format: "esm",
         sourcemap: true,
       },
@@ -32,7 +31,7 @@ module.exports = [
   },
   {
     input: "dist/esm/types/index.d.ts",
-    output: [{ file: "dist/index.d.ts", format: "esm" }],
+    output: [{ file: "dist/cjs/index.d.ts", format: "esm" }],
     plugins: [dts.default()],
   },
 ];

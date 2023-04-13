@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import { getControlValidationErrors } from "./helpers";
 import { ITextboxProps } from "./types";
 
