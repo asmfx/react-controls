@@ -1,6 +1,7 @@
 import React, { ReactNode } from "react";
 import { Button } from "./Button";
 import { ButtonWithConfirmation } from "./ButtonWithConfirmation";
+import { getValue } from "./helpers";
 
 export const Table: React.FC<{
   data?: any;
@@ -89,29 +90,32 @@ export const Table: React.FC<{
                         }}
                       >
                         {column.render
-                          ? render?.({ key: column.render, item: cells }) ||
-                            (column.render === "button" ? (
-                              <Button
-                                variant={column.variant}
-                                label={column.label}
-                                data={cells}
-                                onClick={column.onClick}
-                              />
-                            ) : column.render === "confirm-button" ? (
-                              <ButtonWithConfirmation
-                                label={column.label}
-                                title={column.title || "Confirm?"}
-                                message={
-                                  column.message || "Are you sure to continue?"
-                                }
-                                data={cells}
-                                variant={column.variant}
-                                onAction={column.onAction}
-                              />
-                            ) : (
-                              <></>
-                            ))
-                          : cells[column.key]}
+                          ? typeof column.render === "function"
+                            ? column.render(cells)
+                            : render?.({ key: column.render, item: cells }) ||
+                              (column.render === "button" ? (
+                                <Button
+                                  variant={column.variant}
+                                  label={column.label}
+                                  data={cells}
+                                  onClick={column.onClick}
+                                />
+                              ) : column.render === "confirm-button" ? (
+                                <ButtonWithConfirmation
+                                  label={column.label}
+                                  title={column.title || "Confirm?"}
+                                  message={
+                                    column.message ||
+                                    "Are you sure to continue?"
+                                  }
+                                  data={cells}
+                                  variant={column.variant}
+                                  onAction={column.onAction}
+                                />
+                              ) : (
+                                <></>
+                              ))
+                          : getValue(cells, column.key)}
                       </td>
                     ) : (
                       <td key={idx}>{cells[column]}</td>
