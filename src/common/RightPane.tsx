@@ -1,3 +1,4 @@
+import React from "react";
 import { ValidReturnTypes } from "./types";
 
 export const RightPane: React.FC<{

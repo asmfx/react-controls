@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
 import { Button } from "./Button";
 import { Variant, ValidReturnTypes } from "./types";
@@ -12,13 +12,14 @@ export const ButtonWithConfirmation: React.FC<{
   variant?: Variant;
   data?: any;
   disabled?: boolean;
-  onAction?: (args?: any) => ValidReturnTypes;
+  onAction?: (data?: any) => ValidReturnTypes;
   children?: React.ReactNode;
 }> = ({
   title,
   message,
   actionLabel,
   cancelLabel,
+  data,
   label,
   variant = "primary",
   onAction,
@@ -26,11 +27,9 @@ export const ButtonWithConfirmation: React.FC<{
   children,
 }) => {
   const [show, setShow] = useState(false);
-  const actionHandler = async (values: any) => {
-    if (onAction !== undefined && values !== undefined) {
-      await onAction(values);
-      setShow(false);
-    }
+  const actionHandler = async (data: any) => {
+    await onAction?.(data);
+    setShow(false);
   };
 
   return (
@@ -48,10 +47,10 @@ export const ButtonWithConfirmation: React.FC<{
           <div className="d-flex justify-content-end w-100 gap-2">
             {onAction && (
               <Button
-                type="submit"
                 label={label || actionLabel}
                 variant={variant}
                 onClick={actionHandler}
+                data={data}
                 autoDisabled
               />
             )}

@@ -1,11 +1,11 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { IButtonProps, Size } from "./types";
 
 export const Button: React.FC<IButtonProps> = ({
   controller,
   icon,
   bind,
-  tag,
+  data,
   type = "button",
   name,
   onClick,
@@ -58,10 +58,10 @@ export const Button: React.FC<IButtonProps> = ({
     if (onClick) {
       if (autoDisabled || autoDisabled === undefined) {
         setInnerDisabled(true);
-        await onClick({ name, data: bind || tag });
+        await onClick(data);
         setInnerDisabled(false);
       } else {
-        await onClick({ name, data: bind || tag });
+        await onClick(data);
       }
     }
   };

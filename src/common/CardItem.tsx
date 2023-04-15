@@ -1,9 +1,9 @@
+import React, { useState } from "react";
 import { ICardItemProps } from "./types";
 import { Modal } from "react-bootstrap";
 import { Button } from "./Button";
 import { RightPane } from "./RightPane";
 import { Div } from "./Div";
-import { useState } from "react";
 
 export const CardItem: React.FC<ICardItemProps> = (props) => {
   const {

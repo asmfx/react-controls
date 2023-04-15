@@ -1,4 +1,6 @@
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
+import { Button } from "./Button";
+import { ButtonWithConfirmation } from "./ButtonWithConfirmation";
 
 export const Table: React.FC<{
   data?: any;
@@ -57,8 +59,26 @@ export const Table: React.FC<{
                       {cell?.control ? cell.control : cell}
                     </td>
                   ))
-                : columns.map((column: any, cdx) =>
-                    typeof column === "object" ? (
+                : columns.map((column: any, cdx) => {
+                    if (column.render === "edit-button") {
+                      column.render = "button";
+                      column.label = column.label || "Edit";
+                      column.variant = column.variant || "warning";
+                      column.style = {
+                        width: "100px",
+                        ...(column.style || {}),
+                      };
+                    } else if (column.render === "delete-button") {
+                      column.render = "confirm-button";
+                      column.label = column.label || "Delete";
+                      column.variant = column.variant || "danger";
+                      column.style = {
+                        width: "100px",
+                        ...(column.style || {}),
+                      };
+                      column.onAction = column.onAction || column.onClick;
+                    }
+                    return typeof column === "object" ? (
                       <td
                         key={cdx}
                         {...{
@@ -69,13 +89,34 @@ export const Table: React.FC<{
                         }}
                       >
                         {column.render
-                          ? render?.({ key: column.render, item: cells })
+                          ? render?.({ key: column.render, item: cells }) ||
+                            (column.render === "button" ? (
+                              <Button
+                                variant={column.variant}
+                                label={column.label}
+                                data={cells}
+                                onClick={column.onClick}
+                              />
+                            ) : column.render === "confirm-button" ? (
+                              <ButtonWithConfirmation
+                                label={column.label}
+                                title={column.title || "Confirm?"}
+                                message={
+                                  column.message || "Are you sure to continue?"
+                                }
+                                data={cells}
+                                variant={column.variant}
+                                onAction={column.onAction}
+                              />
+                            ) : (
+                              <></>
+                            ))
                           : cells[column.key]}
                       </td>
                     ) : (
                       <td key={idx}>{cells[column]}</td>
-                    )
-                  )}
+                    );
+                  })}
             </tr>
           );
         })}

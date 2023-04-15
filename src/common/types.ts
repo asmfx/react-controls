@@ -100,10 +100,11 @@ export interface ICheckboxProps
 
 export interface IButtonProps extends IBaseControlProps {
   type?: ButtonType;
+  data?: any;
   disabledLabel?: string;
   autoDisabled?: boolean;
   outline?: boolean;
-  onClick?: (args?: { name?: string; data?: any }) => ValidReturnTypes;
+  onClick?: (data?: any) => ValidReturnTypes;
 }
 
 export interface InputOption {
