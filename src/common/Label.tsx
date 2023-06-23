@@ -1,5 +1,5 @@
 import React from "react";
-import { getControlValidationErrors } from "./helpers";
+import { getControlValidationErrors, getValue } from "./helpers";
 import { ILabelProps } from "./types";
 
 export const Label: React.FC<ILabelProps> = (props) => {
@@ -11,6 +11,7 @@ export const Label: React.FC<ILabelProps> = (props) => {
     suffix,
     prefix,
     children,
+    layout,
   } = props;
 
   let { name, errors, bind, value } = props;
@@ -24,10 +25,22 @@ export const Label: React.FC<ILabelProps> = (props) => {
 
   const _value: string =
     controller?.values && name
-      ? controller.values[name]
+      ? getValue(controller.values, name)
       : bind && name && typeof bind === "object"
-      ? bind[name] || value
+      ? getValue(bind, name) || value
       : value;
+
+  if (layout === "raw") {
+    return (
+      <span
+        id={name}
+        className={`text-small ${isInvalid}`}
+        placeholder={placeholder}
+      >
+        {_value}
+      </span>
+    );
+  }
 
   return (
     <>

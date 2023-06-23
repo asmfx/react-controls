@@ -14,6 +14,7 @@ export const Checkbox: React.FC<ICheckboxProps> = (props) => {
     readOnly,
     disabled,
     children,
+    layout,
   } = props;
 
   let { name, errors, bind, value, onChange } = props;
@@ -46,6 +47,20 @@ export const Checkbox: React.FC<ICheckboxProps> = (props) => {
     onChange && onChange({ name, tag, value: event.target.value });
   };
 
+  if (layout === "raw") {
+    return (
+      <input
+        className={`form-check-input${isInvalid}`}
+        type="checkbox"
+        id={name}
+        readOnly={readOnly}
+        placeholder={placeholder}
+        onChange={changeHandler}
+        checked={!!_value}
+        disabled={disabled}
+      />
+    );
+  }
   return (
     <>
       <div className={className ? `form-check ${className}` : "form-check"}>

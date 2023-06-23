@@ -21,7 +21,7 @@ interface IDataControllerBase {
   submit: () => ValidReturnTypes;
 }
 
-interface IChangeHandlerArgs {
+export interface IChangeHandlerArgs {
   name: string;
   selector?: string;
   value: any;
@@ -34,7 +34,7 @@ interface IListChangeHandlerArgs {
   value: any;
 }
 
-interface IDataController extends IDataControllerBase {
+export interface IDataController extends IDataControllerBase {
   values: any;
   errors: any;
   checks: any;

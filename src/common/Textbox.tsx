@@ -15,6 +15,7 @@ export const Textbox: React.FC<ITextboxProps> = (props) => {
     maxLength,
     disabled,
     children,
+    layout,
   } = props;
 
   let { name, errors, bind, value, onChange } = props;
@@ -46,6 +47,21 @@ export const Textbox: React.FC<ITextboxProps> = (props) => {
   const changeHandler = (event: any) => {
     onChange && onChange({ name, tag, value: event.target.value });
   };
+
+  if (layout === "raw") {
+    return (
+      <input
+        id={name}
+        className={`form-control${isInvalid}`}
+        type={type}
+        placeholder={placeholder}
+        onChange={changeHandler}
+        value={_value}
+        maxLength={maxLength}
+        disabled={disabled}
+      />
+    );
+  }
 
   return (
     <>

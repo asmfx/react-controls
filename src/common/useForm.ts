@@ -65,6 +65,47 @@ export interface UseFormReturnValues<T> {
   ) => (arg: IAnyHandlerValue) => ValidReturnTypes;
 }
 
+export const simpleForm = ({
+  values,
+  onChange,
+}: {
+  values?: any;
+  onChange: (args: IAnyHandlerValue) => ValidReturnTypes;
+}) => {
+  return {
+    values,
+    errors: {},
+    checks: {},
+    busy: false,
+    reset: () => {},
+    setValues: (values: any) => {},
+    setObject: (values: any) => {},
+    setValue: (name: string, value?: any) => {},
+
+    setErrors: (values: any, force?: boolean) => {},
+    setError: (key: string, option?: any) => {},
+    clearError: (key: string, option?: string) => {},
+
+    submitHandler: () => {},
+
+    rawChangeHandler: onChange,
+    stringChangeHandler: ({ value, ...args }: IAnyHandlerValue) => {
+      onChange({ ...args, value: value?.toString() });
+    },
+    intChangeHandler: ({ value, ...args }: IAnyHandlerValue) => {
+      onChange({ ...args, value: parseInt(value) });
+    },
+    booleanChangeHandler: ({ value, ...args }: IAnyHandlerValue) => {
+      onChange({ ...args, value: !!value });
+    },
+    keyStringChangeHandler: (key: any) => (arg: IAnyHandlerValue) => {},
+    keyIntChangeHandler: (key: any) => (arg: IAnyHandlerValue) => {},
+    keyBooleanChangeHandler: (key: any) => (arg: IAnyHandlerValue) => {},
+    keyIntArrayChangeHandler: (key: any) => (arg: IAnyHandlerValue) => {},
+    keyStringArrayChangeHandler: (key: any) => (arg: IAnyHandlerValue) => {},
+  };
+};
+
 export const useForm = <T extends object>(
   options?: UseFormParameters<T>
 ): UseFormReturnValues<T> => {

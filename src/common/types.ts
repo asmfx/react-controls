@@ -1,5 +1,6 @@
 import { DetailedHTMLProps, InputHTMLAttributes, ReactNode } from "react";
 import { IControlValidationProps, IFormController } from "./useForm";
+import { IDataController } from "./useDataController";
 
 export type Variant =
   | "none"
@@ -20,7 +21,7 @@ export type ButtonType = "submit" | "button";
 
 export type TextboxType = "text" | "password" | "number";
 
-export type Layout = "control-with-label" | "control";
+export type Layout = "form-control" | "raw";
 
 export type Size = "lg" | "md" | "sm" | "xs";
 
@@ -40,6 +41,7 @@ export interface IBaseControlProps {
   name?: string;
   variant?: Variant;
   border?: BorderType;
+  layout?: Layout;
   size?: Size;
   bind?: any;
   tag?: any;
@@ -75,16 +77,24 @@ export interface IListViewerProps
 
 export interface ICrossFormProps
   extends Omit<IFormControlProps, "onChange" | "value"> {
+  header?: any[];
   options?: any[];
+  lookupRef?: string;
   value?: any[];
   renderItem?: (args: {
     selected: boolean;
     selectHandler: (options: any) => ValidReturnTypes;
     option: any;
     item: any;
+    controller: IDataController;
     index?: number;
     list?: any[];
   }) => ReactNode;
+  onChange?: (args: {
+    value: any[];
+    name?: string;
+    tag?: any;
+  }) => ValidReturnTypes;
 }
 
 export interface ITextboxProps
