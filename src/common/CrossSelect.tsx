@@ -34,7 +34,7 @@ export const CrossSelect: React.FC<ICrossSelectProps> = (props) => {
     if (!onChange) {
       onChange = ({ name, value }) => {
         if (name) {
-          return controller.rawChangeHandler({
+          return controller.changeHandler({
             name,
             value,
           });
@@ -50,16 +50,16 @@ export const CrossSelect: React.FC<ICrossSelectProps> = (props) => {
     controller?.values && name
       ? controller.values[name]
       : bind && name && typeof bind === "object"
-      ? bind[name] || value
-      : value;
+        ? bind[name] || value
+        : value;
 
   let __value: any[] = !__rvalue
     ? []
     : typeof __rvalue === "string"
-    ? __rvalue?.split?.(",")?.filter?.((i) => i) || []
-    : Array.isArray(__rvalue)
-    ? __rvalue
-    : [__rvalue];
+      ? __rvalue?.split?.(",")?.filter?.((i) => i) || []
+      : Array.isArray(__rvalue)
+        ? __rvalue
+        : [__rvalue];
 
   const _value = __value
     .map((i) => (typeof i === "object" ? i[lookupRef || "id"] : i))
@@ -87,8 +87,8 @@ export const CrossSelect: React.FC<ICrossSelectProps> = (props) => {
     const _value: any =
       dataType === "int"
         ? __argv.map((item) =>
-            typeof item === "string" ? parseInt(item) : item
-          )
+          typeof item === "string" ? parseInt(item) : item
+        )
         : __argv.map((i) => i.toString());
     const value = _value.map((i: any) => ({ [lookupRef || "id"]: i }));
 

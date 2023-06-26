@@ -33,7 +33,7 @@ export const MultiSelect: React.FC<IMultiSelectProps> = (props) => {
     if (!onChange) {
       onChange = ({ name, value }) => {
         if (name) {
-          return controller.rawChangeHandler({
+          return controller.changeHandler({
             name,
             value,
           });
@@ -49,22 +49,22 @@ export const MultiSelect: React.FC<IMultiSelectProps> = (props) => {
     controller?.values && name
       ? controller.values[name]
       : bind && name && typeof bind === "object"
-      ? bind[name] || value
-      : value;
+        ? bind[name] || value
+        : value;
 
   const __value: any[] = !__rvalue
     ? []
     : typeof __rvalue === "string"
-    ? __rvalue?.split?.(",")?.filter?.((i) => i) || []
-    : Array.isArray(__rvalue)
-    ? __rvalue
-    : [__rvalue];
+      ? __rvalue?.split?.(",")?.filter?.((i) => i) || []
+      : Array.isArray(__rvalue)
+        ? __rvalue
+        : [__rvalue];
 
   const _value =
     dataType === "int"
       ? __value.map((item) =>
-          typeof item === "string" ? parseInt(item) : item
-        )
+        typeof item === "string" ? parseInt(item) : item
+      )
       : __value.map((i) => i.toString());
 
   const __options = options
@@ -88,11 +88,11 @@ export const MultiSelect: React.FC<IMultiSelectProps> = (props) => {
     const value: any =
       dataType === "int"
         ? __argv.map((item) =>
-            typeof item === "string" ? parseInt(item) : item
-          )
+          typeof item === "string" ? parseInt(item) : item
+        )
         : dataType === "csv"
-        ? __argv.map((i) => i.toString()).join(",")
-        : __argv.map((i) => i.toString());
+          ? __argv.map((i) => i.toString()).join(",")
+          : __argv.map((i) => i.toString());
 
     onChange && onChange({ name, value });
   };

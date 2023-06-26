@@ -24,9 +24,9 @@ export const Checkbox: React.FC<ICheckboxProps> = (props) => {
     if (!onChange) {
       onChange = ({ name, value }) => {
         if (name) {
-          return controller.booleanChangeHandler({
+          return controller.changeHandler({
             name,
-            value,
+            value: !!value,
           });
         }
       };
@@ -40,8 +40,8 @@ export const Checkbox: React.FC<ICheckboxProps> = (props) => {
     controller?.values && name
       ? controller.values[name]
       : bind && name && typeof bind === "object"
-      ? bind[name] || value
-      : value;
+        ? bind[name] || value
+        : value;
 
   const changeHandler = (event: any) => {
     onChange && onChange({ name, tag, value: event.target.value });

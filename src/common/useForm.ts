@@ -23,9 +23,9 @@ export interface IControlValidationProps {
 
 export interface IControlOptions
   extends IControlValidationProps,
-    Record<string, any> {}
+  Record<string, any> { }
 
-export interface IFormController extends UseFormReturnValues<any> {}
+export interface IFormController extends UseFormReturnValues<any> { }
 
 export interface UseFormReturnValues<T> {
   values: Partial<T>;
@@ -43,6 +43,7 @@ export interface UseFormReturnValues<T> {
 
   submitHandler: () => ValidReturnTypes;
 
+  changeHandler: (arg: IAnyHandlerValue) => ValidReturnTypes;
   rawChangeHandler: (arg: IAnyHandlerValue) => ValidReturnTypes;
   stringChangeHandler: (arg: IAnyHandlerValue) => ValidReturnTypes;
   intChangeHandler: (arg: IAnyHandlerValue) => ValidReturnTypes;
@@ -77,18 +78,19 @@ export const simpleForm = ({
     errors: {},
     checks: {},
     busy: false,
-    reset: () => {},
-    setValues: (values: any) => {},
-    setObject: (values: any) => {},
-    setValue: (name: string, value?: any) => {},
+    reset: () => { },
+    setValues: (values: any) => { },
+    setObject: (values: any) => { },
+    setValue: (name: string, value?: any) => { },
 
-    setErrors: (values: any, force?: boolean) => {},
-    setError: (key: string, option?: any) => {},
-    clearError: (key: string, option?: string) => {},
+    setErrors: (values: any, force?: boolean) => { },
+    setError: (key: string, option?: any) => { },
+    clearError: (key: string, option?: string) => { },
 
-    submitHandler: () => {},
+    submitHandler: () => { },
 
     rawChangeHandler: onChange,
+    changeHandler: onChange,
     stringChangeHandler: ({ value, ...args }: IAnyHandlerValue) => {
       onChange({ ...args, value: value?.toString() });
     },
@@ -98,11 +100,11 @@ export const simpleForm = ({
     booleanChangeHandler: ({ value, ...args }: IAnyHandlerValue) => {
       onChange({ ...args, value: !!value });
     },
-    keyStringChangeHandler: (key: any) => (arg: IAnyHandlerValue) => {},
-    keyIntChangeHandler: (key: any) => (arg: IAnyHandlerValue) => {},
-    keyBooleanChangeHandler: (key: any) => (arg: IAnyHandlerValue) => {},
-    keyIntArrayChangeHandler: (key: any) => (arg: IAnyHandlerValue) => {},
-    keyStringArrayChangeHandler: (key: any) => (arg: IAnyHandlerValue) => {},
+    keyStringChangeHandler: (key: any) => (arg: IAnyHandlerValue) => { },
+    keyIntChangeHandler: (key: any) => (arg: IAnyHandlerValue) => { },
+    keyBooleanChangeHandler: (key: any) => (arg: IAnyHandlerValue) => { },
+    keyIntArrayChangeHandler: (key: any) => (arg: IAnyHandlerValue) => { },
+    keyStringArrayChangeHandler: (key: any) => (arg: IAnyHandlerValue) => { },
   };
 };
 
@@ -142,63 +144,63 @@ export const useForm = <T extends object>(
 
   const keyStringChangeHandler =
     (key: keyof T, options?: { trim?: boolean }) =>
-    ({ name, value }: IAnyHandlerValue) => {
-      const newSubValues = { ...(values[key] || {}), [name]: value };
-      const newValues = { ...values, [key]: newSubValues };
-      const isValid = validateAndSet(newValues);
-      setValues(newValues);
-      onChange?.(newValues, { isValid });
-    };
+      ({ name, value }: IAnyHandlerValue) => {
+        const newSubValues = { ...(values[key] || {}), [name]: value };
+        const newValues = { ...values, [key]: newSubValues };
+        const isValid = validateAndSet(newValues);
+        setValues(newValues);
+        onChange?.(newValues, { isValid });
+      };
 
   const keyIntChangeHandler =
     (key: keyof T) =>
-    ({ name, value }: IAnyHandlerValue) => {
-      const newSubValues = { ...(values[key] || {}), [name]: parseInt(value) };
-      const newValues = { ...values, [key]: newSubValues };
-      const isValid = validateAndSet(newValues);
-      setValues(newValues);
-      onChange?.(newValues, { isValid });
-    };
+      ({ name, value }: IAnyHandlerValue) => {
+        const newSubValues = { ...(values[key] || {}), [name]: parseInt(value) };
+        const newValues = { ...values, [key]: newSubValues };
+        const isValid = validateAndSet(newValues);
+        setValues(newValues);
+        onChange?.(newValues, { isValid });
+      };
 
   const keyIntArrayChangeHandler =
     (key: keyof T) =>
-    ({ name, value }: IAnyHandlerValue) => {
-      const _arrValues = value
-        .toString()
-        .split(",")
-        .filter((i: string) => i)
-        .map((i: string) => parseInt(i))
-        .filter((i: number) => i && !isNaN(i));
-      const newSubValues = { ...(values[key] || {}), [name]: _arrValues };
-      const newValues = { ...values, [key]: newSubValues };
-      const isValid = validateAndSet(newValues);
-      setValues(newValues);
-      onChange?.(newValues, { isValid });
-    };
+      ({ name, value }: IAnyHandlerValue) => {
+        const _arrValues = value
+          .toString()
+          .split(",")
+          .filter((i: string) => i)
+          .map((i: string) => parseInt(i))
+          .filter((i: number) => i && !isNaN(i));
+        const newSubValues = { ...(values[key] || {}), [name]: _arrValues };
+        const newValues = { ...values, [key]: newSubValues };
+        const isValid = validateAndSet(newValues);
+        setValues(newValues);
+        onChange?.(newValues, { isValid });
+      };
 
   const keyBooleanChangeHandler =
     (key: keyof T) =>
-    ({ name, value }: IAnyHandlerValue) => {
-      const newSubValues = { ...(values[key] || {}), [name]: !!value };
-      const newValues = { ...values, [key]: newSubValues };
-      const isValid = validateAndSet(newValues);
-      setValues(newValues);
-      onChange?.(newValues, { isValid });
-    };
+      ({ name, value }: IAnyHandlerValue) => {
+        const newSubValues = { ...(values[key] || {}), [name]: !!value };
+        const newValues = { ...values, [key]: newSubValues };
+        const isValid = validateAndSet(newValues);
+        setValues(newValues);
+        onChange?.(newValues, { isValid });
+      };
 
   const keyStringArrayChangeHandler =
     (key: keyof T) =>
-    ({ name, value }: IAnyHandlerValue) => {
-      const _arrValues = value
-        .toString()
-        .split(",")
-        .filter((i: string) => i);
-      const newSubValues = { ...(values[key] || {}), [name]: _arrValues };
-      const newValues = { ...values, [key]: newSubValues };
-      const isValid = validateAndSet(newValues);
-      setValues(newValues);
-      onChange?.(newValues, { isValid });
-    };
+      ({ name, value }: IAnyHandlerValue) => {
+        const _arrValues = value
+          .toString()
+          .split(",")
+          .filter((i: string) => i);
+        const newSubValues = { ...(values[key] || {}), [name]: _arrValues };
+        const newValues = { ...values, [key]: newSubValues };
+        const isValid = validateAndSet(newValues);
+        setValues(newValues);
+        onChange?.(newValues, { isValid });
+      };
 
   const intChangeHandler = ({ name, value }: IAnyHandlerValue) => {
     const newValues = { ...values, [name]: parseInt(value) };
@@ -340,6 +342,7 @@ export const useForm = <T extends object>(
     setErrors: updateInternalErrors,
     setError,
     clearError,
+    changeHandler: rawChangeHandler,
     rawChangeHandler,
     stringChangeHandler,
     keyStringChangeHandler,

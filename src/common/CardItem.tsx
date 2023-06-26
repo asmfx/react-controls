@@ -31,7 +31,9 @@ export const CardItem: React.FC<ICardItemProps> = (props) => {
     setShow(true);
   };
   const actionHandler = () => {
-    controller?.submitHandler();
+    if (controller && "submitHandler" in controller) {
+      controller.submitHandler();
+    }
     setShow(false);
   };
   return (

@@ -1,4 +1,4 @@
-import { DetailedHTMLProps, InputHTMLAttributes, ReactNode } from "react";
+import { DetailedHTMLProps, InputHTMLAttributes, ReactElement, ReactNode } from "react";
 import { IControlValidationProps, IFormController } from "./useForm";
 import { IDataController } from "./useDataController";
 
@@ -35,9 +35,9 @@ export type HTMLInput = DetailedHTMLProps<
 >;
 
 export interface IBaseControlProps {
-  label?: ReactNode;
+  label?: any;
   icon?: ReactNode;
-  controller?: IFormController;
+  controller?: IFormController | IDataController;
   name?: string;
   variant?: Variant;
   border?: BorderType;
@@ -67,7 +67,7 @@ export interface IFormControlProps extends IBaseControlProps {
   }) => ValidReturnTypes;
 }
 
-export interface ILabelProps extends Omit<IFormControlProps, "onChange"> {}
+export interface ILabelProps extends Omit<IFormControlProps, "onChange"> { }
 export interface IListViewerProps
   extends Omit<IFormControlProps, "onChange" | "value"> {
   value?: any[];
@@ -99,14 +99,14 @@ export interface ICrossFormProps
 
 export interface ITextboxProps
   extends IControlValidationProps,
-    IFormControlProps {
+  IFormControlProps {
   type?: TextboxType;
   maxLength?: number;
 }
 
 export interface ICheckboxProps
   extends IControlValidationProps,
-    IFormControlProps {}
+  IFormControlProps { }
 
 export interface IButtonProps extends IBaseControlProps {
   type?: ButtonType;
@@ -126,7 +126,7 @@ export interface InputOption {
 
 export interface ISelectProps
   extends IControlValidationProps,
-    IFormControlProps {
+  IFormControlProps {
   options?: InputOption[];
   parentKey?: string;
   rootId?: any;
@@ -144,7 +144,7 @@ export interface ISelectProps
 
 export interface IMultiSelectProps
   extends IControlValidationProps,
-    IFormControlProps {
+  IFormControlProps {
   options?: InputOption[];
   parentKey?: string;
   rootId?: any;
@@ -161,7 +161,7 @@ export interface IMultiSelectProps
 
 export interface ICrossSelectProps
   extends IControlValidationProps,
-    IFormControlProps {
+  IFormControlProps {
   options?: InputOption[];
   parentKey?: string;
   rootId?: any;

@@ -34,12 +34,12 @@ export const Select: React.FC<ISelectProps> = (props) => {
       onChange = ({ name, value }) => {
         if (name) {
           if (dataType === "int") {
-            return controller.intChangeHandler({
+            return controller.changeHandler({
               name,
-              value,
+              value: parseInt(value)
             });
           } else {
-            return controller.stringChangeHandler({
+            return controller.changeHandler({
               name,
               value,
             });
@@ -56,8 +56,8 @@ export const Select: React.FC<ISelectProps> = (props) => {
     controller?.values && name
       ? controller.values[name]
       : bind && name && typeof bind === "object"
-      ? bind[name] || value
-      : value;
+        ? bind[name] || value
+        : value;
 
   const __options = options
     ? parentKey

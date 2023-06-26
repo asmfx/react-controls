@@ -27,8 +27,8 @@ export const CrossForm: React.FC<ICrossFormProps> = (props) => {
     controller?.values && name
       ? controller.values[name]
       : bind && name && typeof bind === "object"
-      ? bind[name] || value
-      : value;
+        ? bind[name] || value
+        : value;
 
   const _options =
     options?.map?.((i) => ({
@@ -45,7 +45,7 @@ export const CrossForm: React.FC<ICrossFormProps> = (props) => {
         ...i.item,
       }));
     if (controller && name) {
-      controller.rawChangeHandler({ name, value: _newValues });
+      controller.changeHandler({ name, value: _newValues });
     }
     onChange?.({ name, value: _newValues, tag });
   };

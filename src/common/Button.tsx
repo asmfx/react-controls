@@ -26,7 +26,7 @@ export const Button: React.FC<IButtonProps> = ({
     if (!onClick && type === "submit") {
       disabled =
         disabled || (controller.errors.validate && !controller.errors.isValid);
-      onClick = controller.submitHandler;
+      onClick = "submitHandler" in controller ? controller.submitHandler : undefined;
     }
   }
 
@@ -50,9 +50,8 @@ export const Button: React.FC<IButtonProps> = ({
       padding: "0",
     };
   }
-  const className = `btn btn-${outline ? "outline-" : ""}${variant}${
-    size ? ` btn-${size}` : ``
-  }`;
+  const className = `btn btn-${outline ? "outline-" : ""}${variant}${size ? ` btn-${size}` : ``
+    }`;
 
   const onClickHandler = async () => {
     if (onClick) {
