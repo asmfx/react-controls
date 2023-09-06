@@ -104,6 +104,12 @@ export interface ITextboxProps
   maxLength?: number;
 }
 
+export interface ITextareaProps
+  extends IControlValidationProps,
+  IFormControlProps {
+  maxLength?: number;
+}
+
 export interface ICheckboxProps
   extends IControlValidationProps,
   IFormControlProps { }

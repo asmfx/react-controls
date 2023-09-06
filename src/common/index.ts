@@ -4,6 +4,7 @@ export * from "./Div";
 export * from "./helpers";
 export * from "./Label";
 export * from "./Span";
+export * from "./Textarea";
 export * from "./Textbox";
 export * from "./RightPane";
 export * from "./types";
