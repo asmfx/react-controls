@@ -14,6 +14,8 @@ export interface UseFormParameters<T> {
 export interface IAnyHandlerValue {
   name: string;
   value: any;
+  autoSave?: boolean;
+  partial?: boolean;
 }
 
 export interface IControlValidationProps {
@@ -128,18 +130,15 @@ export const useForm = <T extends object>(
     reset();
   }, [initialValues]);
 
-  const stringChangeHandler = ({ name, value }: IAnyHandlerValue) => {
+  const rawChangeHandler = ({ name, value, autoSave, partial }: IAnyHandlerValue) => {
     const newValues = { ...values, [name]: value };
     const isValid = validateAndSet(newValues);
     setValues(newValues);
     onChange?.(newValues, { isValid });
-  };
-
-  const rawChangeHandler = ({ name, value }: IAnyHandlerValue) => {
-    const newValues = { ...values, [name]: value };
-    const isValid = validateAndSet(newValues);
-    setValues(newValues);
-    onChange?.(newValues, { isValid });
+    if (autoSave) {
+      const data = partial ? { [name]: value } : newValues;
+      onSubmit?.(data as any);
+    }
   };
 
   const keyStringChangeHandler =
@@ -344,7 +343,7 @@ export const useForm = <T extends object>(
     clearError,
     changeHandler: rawChangeHandler,
     rawChangeHandler,
-    stringChangeHandler,
+    stringChangeHandler: rawChangeHandler,
     keyStringChangeHandler,
     keyIntChangeHandler,
     keyBooleanChangeHandler,
