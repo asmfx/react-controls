@@ -126,9 +126,11 @@ export const useForm = <T extends object>(
     setErrors({});
   };
 
+  const dependency = JSON.stringify(initialValues);
+
   useEffect(() => {
     reset();
-  }, [initialValues]);
+  }, [dependency]);
 
   const rawChangeHandler = ({ name, value, autoSave, partial }: IAnyHandlerValue) => {
     const newValues = { ...values, [name]: value };

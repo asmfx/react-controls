@@ -17,8 +17,17 @@ export const Table: React.FC<{
     <table className="table table-sm table-striped table-hover">
       <thead>
         <tr>
-          {columns.map((column: any, idx) =>
-            typeof column === "object" ? (
+          {columns.map((column: any, idx) => {
+
+            if (typeof column !== "object") {
+              return <td key={idx}>{column}</td>;
+            }
+
+            if (column.headerGuard && typeof column.headerGuard === "function" && !column.headerGuard(column)) {
+              return <></>;
+            }
+
+            return (
               <td
                 key={column?.key || idx}
                 {...{
@@ -30,9 +39,8 @@ export const Table: React.FC<{
               >
                 {column.headerControl || column.title}
               </td>
-            ) : (
-              <td key={idx}>{column}</td>
-            )
+            );
+          }
           )}
         </tr>
       </thead>
@@ -46,81 +54,92 @@ export const Table: React.FC<{
             >
               {Array.isArray(cells)
                 ? cells.map((cell, cdx) => (
+                  <td
+                    key={cdx}
+                    {...{
+                      ...(cell?.control && cell?.className
+                        ? { className: cell.className }
+                        : {}),
+                      ...(cell?.control && cell?.style
+                        ? { style: cell.style }
+                        : {}),
+                    }}
+                  >
+                    {cell?.control ? cell.control : cell}
+                  </td>
+                ))
+                : columns.map((column: any, cdx) => {
+                  if (column.render === "edit-button") {
+                    column.render = "button";
+                    column.label = column.label || "Edit";
+                    column.variant = column.variant || "warning";
+                    column.style = {
+                      width: "100px",
+                      ...(column.style || {}),
+                    };
+                  } else if (column.render === "delete-button") {
+                    column.render = "confirm-button";
+                    column.label = column.label || "Delete";
+                    column.variant = column.variant || "danger";
+                    column.style = {
+                      width: "100px",
+                      ...(column.style || {}),
+                    };
+                    column.onAction = column.onAction || column.onClick;
+                  }
+
+                  if (typeof column !== "object") {
+                    return <td key={idx}>{getValue(cells, column)}</td>;
+                  }
+
+                  if (column.cellGuard && typeof column.cellGuard === "function" && !column.cellGuard(cells)) {
+                    return <></>;
+                  }
+
+                  if (column.guard && typeof column.guard === "function" && !column.guard(cells)) {
+                    return <td key={idx}></td>;
+                  }
+
+                  return (
                     <td
                       key={cdx}
                       {...{
-                        ...(cell?.control && cell?.className
-                          ? { className: cell.className }
+                        ...(column?.itemClassName
+                          ? { className: column.itemClassName }
                           : {}),
-                        ...(cell?.control && cell?.style
-                          ? { style: cell.style }
-                          : {}),
+                        ...(column?.style ? { style: column.style } : {}),
                       }}
                     >
-                      {cell?.control ? cell.control : cell}
+                      {column.render
+                        ? typeof column.render === "function"
+                          ? column.render(cells)
+                          : render?.({ key: column.render, item: cells }) ||
+                          (column.render === "button" ? (
+                            <Button
+                              variant={column.variant}
+                              label={column.label}
+                              data={cells}
+                              onClick={column.onClick}
+                            />
+                          ) : column.render === "confirm-button" ? (
+                            <ButtonWithConfirmation
+                              label={column.label}
+                              title={column.title || "Confirm?"}
+                              message={
+                                column.message ||
+                                "Are you sure to continue?"
+                              }
+                              data={cells}
+                              variant={column.variant}
+                              onAction={column.onAction}
+                            />
+                          ) : (
+                            <></>
+                          ))
+                        : getValue(cells, column.key)}
                     </td>
-                  ))
-                : columns.map((column: any, cdx) => {
-                    if (column.render === "edit-button") {
-                      column.render = "button";
-                      column.label = column.label || "Edit";
-                      column.variant = column.variant || "warning";
-                      column.style = {
-                        width: "100px",
-                        ...(column.style || {}),
-                      };
-                    } else if (column.render === "delete-button") {
-                      column.render = "confirm-button";
-                      column.label = column.label || "Delete";
-                      column.variant = column.variant || "danger";
-                      column.style = {
-                        width: "100px",
-                        ...(column.style || {}),
-                      };
-                      column.onAction = column.onAction || column.onClick;
-                    }
-                    return typeof column === "object" ? (
-                      <td
-                        key={cdx}
-                        {...{
-                          ...(column?.itemClassName
-                            ? { className: column.itemClassName }
-                            : {}),
-                          ...(column?.style ? { style: column.style } : {}),
-                        }}
-                      >
-                        {column.render
-                          ? typeof column.render === "function"
-                            ? column.render(cells)
-                            : render?.({ key: column.render, item: cells }) ||
-                              (column.render === "button" ? (
-                                <Button
-                                  variant={column.variant}
-                                  label={column.label}
-                                  data={cells}
-                                  onClick={column.onClick}
-                                />
-                              ) : column.render === "confirm-button" ? (
-                                <ButtonWithConfirmation
-                                  label={column.label}
-                                  title={column.title || "Confirm?"}
-                                  message={
-                                    column.message ||
-                                    "Are you sure to continue?"
-                                  }
-                                  data={cells}
-                                  variant={column.variant}
-                                  onAction={column.onAction}
-                                />
-                              ) : (
-                                <></>
-                              ))
-                          : getValue(cells, column.key)}
-                      </td>
-                    ) : (
-                      <td key={idx}>{cells[column]}</td>
-                    );
-                  })}
+                  );
+                })}
             </tr>
           );
         })}
