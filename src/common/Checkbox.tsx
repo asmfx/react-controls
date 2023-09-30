@@ -44,7 +44,7 @@ export const Checkbox: React.FC<ICheckboxProps> = (props) => {
         : value;
 
   const changeHandler = (event: any) => {
-    onChange && onChange({ name, tag, value: event.target.value });
+    onChange && onChange({ name, tag, value: event.target.checked });
   };
 
   if (layout === "raw") {
